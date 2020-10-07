@@ -44,6 +44,18 @@ public class JPAEvento {
         return e;
     }
     
+    public void edita(EventoEntity e) {
+        
+        em = JPAUtil.getEM();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        EventoEntity e2 = em.find(EventoEntity.class, e.getId());
+        e2=em.merge(e);
+        et.commit();
+        em.close();
+        
+    }
+    
     List<EventoEntity> buscaNomeEvento(String nomeEvento) {
         String jpqlQuery = "SELECT e FROM EventoEntity e where e.nome_evento = :ne";
         em = JPAUtil.getEM();

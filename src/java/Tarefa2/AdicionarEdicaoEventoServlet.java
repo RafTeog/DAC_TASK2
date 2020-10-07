@@ -3,10 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Tarefa2;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -17,10 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author RAF
+ * @author viter
  */
-@WebServlet(name = "AtualizarEventoServlet", urlPatterns = {"/AtualizarEventoServlet"})
-public class AtualizarEventoServlet extends HttpServlet {
+@WebServlet(name = "AdicionarEdicaoEventoServlet", urlPatterns = {"/AdicionarEdicaoEventoServlet"})
+public class AdicionarEdicaoEventoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,8 +38,6 @@ public class AtualizarEventoServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   // </editor-fold>
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,10 +46,10 @@ public class AtualizarEventoServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CadastrarEventoServlet</title>");
+            out.println("<title>Servlet BuscaServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CadastrarEventoServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet BuscaServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -81,36 +86,41 @@ public class AtualizarEventoServlet extends HttpServlet {
         // Obtain a database connection:
         //EntityManagerFactory emf = Persistence.createEntityManagerFactory("AgendaPU");
         //EntityManager em = JPAUtil.getEM();
-        JPAEvento JPAev = new JPAEvento();
+        JPAEvento jev = new JPAEvento();
 
-        EventoEntity ee = new EventoEntity();
-        ee.setId(Long.parseLong(request.getParameter("idev")));
-        ee.setNome_evento(request.getParameter("nomeev"));
-        ee.setSigla_evento(request.getParameter("siglaev"));
-        ee.setArea_concent_evento(request.getParameter("areaev"));
-        ee.setInst_organizadora(request.getParameter("instev"));
+        List<EventoEntity> eventos = jev.buscaNomeEvento(request.getParameter("nomeev"));
 
-        //EntityTransaction et = em.getTransaction();
-        //et.begin();
-        //em.persist(entrada);
-        //et.commit();
-        
-        //JPAev.exclui(Long.parseLong(request.getParameter("idev")));
-        //JPAev.salva(ee);
-        JPAev.edita(ee);
+        int k = eventos.size();
 
-        Long id = ee.getId();
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Evento - Resultado de Consulta</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Resultado da consulta para evento com nomenome \"" + request.getParameter("nomeev") + "\"</h1>");
+            out.println("<p>Foram encontrados " + k + " evento(s) com nome \"" + request.getParameter("nomeev") + "\":<p>");
 
-        request.setAttribute("id", id);
+            Iterator<EventoEntity> eventosAsIterator = eventos.iterator();
+            EventoEntity ent = null;
+            while (eventosAsIterator.hasNext()) {
+                ent = eventosAsIterator.next();
+                out.println("<p> ID:" + ent.getId() + "\"</p>");
+                out.println("<p> Sigla:" + ent.getSigla_evento() + "\"</p>");
+                out.println("<p> Instituição Organizadora:" + ent.getInst_organizadora() + "\"</p>");
+                out.println("<p> Area Evento:" + ent.getArea_concent_evento() + "\"</p>");
+            }
 
-        ServletContext servcontext = request.getServletContext();
+            
+            request.setAttribute("id", ent.getId());
+            request.setAttribute("area", ent.getArea_concent_evento());
+            request.setAttribute("instorg", ent.getInst_organizadora());
+            request.setAttribute("nome", ent.getNome_evento());
+            request.setAttribute("sigla", ent.getSigla_evento());            
+            request.getRequestDispatcher("AddEditionUpdateEvent.jsp").forward(request, response);
+            //colocar a parte do cadastrar que manda parametros
 
-        if (JPAev.recupera(id) != null) {
-            RequestDispatcher dispatcher = servcontext.getRequestDispatcher("/MostraEventoCadastrado.jsp");
-            dispatcher.include(request, response);
-        } else {
-            RequestDispatcher dispatcher = servcontext.getRequestDispatcher("/MostraFalha.jsp");
-            dispatcher.include(request, response);
         }
 
     }
@@ -123,6 +133,6 @@ public class AtualizarEventoServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }//
+    }// </editor-fold>
 
 }

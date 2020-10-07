@@ -7,13 +7,13 @@ and open the template in the editor.
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-        <title>Evento - Página de Deleção</title>
+        <title>Evento - Adicionar Edição</title>
     </head>
     <body>
-        <h1>Preencha o nome do evento a ser deletado:</h1>
-        <form action="DeletarEventoServlet" method="post">
-            ID Evento: <input type="text" name="idev"/><br/>
-            <input type="submit" value="Deletar"/>
+        <h1>Preencha o nome do evento procurado para adicionar edição :</h1>
+        <form action="AdicionarEdicaoEventoServlet" method="post">
+            Nome Evento: <input type="text" name="nomeev"/><br/>
+            <input type="submit" value="Buscar"/>
         </form>
     </body>
 </html>

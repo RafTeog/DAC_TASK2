@@ -24,6 +24,10 @@
         <servlet-name>AtualizarEventoServlet</servlet-name>
         <servlet-class>Tarefa2.AtualizarEventoServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdicionarEdicaoEventoServlet</servlet-name>
+        <servlet-class>Tarefa2.AdicionarEdicaoEventoServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadastrarEventoServlet</servlet-name>
         <url-pattern>/CadastrarEventoServlet</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>AtualizarEventoServlet</servlet-name>
         <url-pattern>/AtualizarEventoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdicionarEdicaoEventoServlet</servlet-name>
+        <url-pattern>/AdicionarEdicaoEventoServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
